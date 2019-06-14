@@ -5,33 +5,33 @@ using System.Linq;
 
 namespace GitLogParser
 {
-	
-	class MainClass
-	{
-		//git log --pretty=format:'[%h],%aN,%ad,%s' --date=short --numstat > ../log.txt
 
-		readonly static string[] excludeSubstring = { ".designer." }; 
-		readonly static string[] includeExts = { ".js", ".cs" };
-		//private static string LogPath = "/Users/daveh/velabs/Ve.Config/log.txt";
-		static string LogPath = "/Users/daveh/velabs/ClientSidePanel/log.txt";
+    class MainClass
+    {
+        //git log --since="last month" --pretty=format:'[%h],%aN,%ad,%s' --date=short --numstat > /Users/daveh/source/repos/logparser/log.txt
+        // --since="last month"
+        readonly static string[] excludeSubstring = { ".designer." };
+        readonly static string[] includeExts = { ".js", ".cs" };
 
-		public static void Main(string[] args)
-		{
-			var commits = GitLog.Read(LogPath);
+        static string LogPath = "log.txt";
 
-			FileReport.FileStats(commits, FileFilter);
+        public static void Main(string[] args)
+        {
+            var commits = GitLog.Read(LogPath);
 
-			//MatrixBuilder.ReportSubDirectory(commits, FileFilter);
-			MatrixBuilder.Report(commits, FileFilter);
-			MatrixBuilder.ReportAuthor(commits, FileFilter);
-			//MatrixBuilder.ReportAuthorSubDirectory(commits, FileFilter);
-		}
+            FileReport.FileStats(commits, FileFilter);
 
-		public static bool FileFilter(string fileName)
-		{
-			return includeExts.Any(e => e == Path.GetExtension(fileName)) &&
-				              !excludeSubstring.Any(e => fileName.ToLowerInvariant().Contains(e)) &&
-				              File.Exists(Path.Combine(Path.GetDirectoryName(LogPath), fileName));
-		}
-	}
+            //MatrixBuilder.ReportSubDirectory(commits, FileFilter);
+            MatrixBuilder.Report(commits, FileFilter);
+            MatrixBuilder.ReportAuthor(commits, FileFilter);
+            //MatrixBuilder.ReportAuthorSubDirectory(commits, FileFilter);
+        }
+
+        public static bool FileFilter(string fileName)
+        {
+            return includeExts.Any(e => e == Path.GetExtension(fileName)) &&
+                              !excludeSubstring.Any(e => fileName.ToLowerInvariant().Contains(e)) &&
+                              File.Exists(Path.Combine(Path.GetDirectoryName(LogPath), fileName));
+        }
+    }
 }
